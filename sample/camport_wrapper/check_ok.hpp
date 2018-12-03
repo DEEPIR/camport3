@@ -9,5 +9,5 @@
            __FILE__, __LINE__);                                                \
       throw std::runtime_error("CHECK TY_STATUS_OK fail");                     \
     }                                                                          \
-  } while (0)
+  } while (0);
 #endif

@@ -11,6 +11,8 @@ public:
   camport_wrapper();
   ~camport_wrapper();
   mat next_depth_frame();
+  void init();
+  void start();
 
 private:
   class impl;
