@@ -2,7 +2,7 @@
 #include <memory>
 #include <opencv2/opencv.hpp>
 namespace deepir {
-namespace camport_wrapper{
+namespace camport_wrapper {
 struct mat {
   cv::Mat content;
   uint64_t seq{0};
@@ -20,5 +20,5 @@ private:
   friend class impl;
   std::unique_ptr<impl> pimpl;
 };
-} // namespace deepir::camport_wrapper
-}
+} // namespace camport_wrapper
+} // namespace deepir

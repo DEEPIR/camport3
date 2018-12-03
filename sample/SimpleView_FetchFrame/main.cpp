@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
         LOGD("At least one component need to be on");
         return -1;
     }
-    LOGD("ID:%s IP:%s", ID, IP);
+    LOGD("ID:%s IP:%s", ID.c_str(), IP.c_str());
     LOGD("Init lib");
     ASSERT_OK( TYInitLib() );
     TY_VERSION_INFO ver;

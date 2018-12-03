@@ -1,11 +1,11 @@
-#include "../camport_wrapper.hpp"
 #include "../../common/common.hpp"
+#include "../camport_wrapper.hpp"
 #include <iostream>
 using namespace std;
 
 int main() {
   deepir::camport_wrapper::camport_wrapper wrapper;
-  
+
   wrapper.init();
   wrapper.start();
 
@@ -14,9 +14,9 @@ int main() {
     try {
       auto m = wrapper.next_depth_frame();
       cout << "get seq:" << m.seq << endl;
-      if(m.content.empty()){
+      if (m.content.empty()) {
         cout << "get empty mat" << endl;
-      }else{
+      } else {
         cout << "get mat success, seq:" << m.seq << endl;
         cv::imshow("depth--", m.content);
         depthViewer.show(m.content);
