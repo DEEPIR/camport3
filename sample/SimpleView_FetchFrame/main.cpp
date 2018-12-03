@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
         LOGD("At least one component need to be on");
         return -1;
     }
-
+    LOGD("ID:%s IP:%s", ID, IP);
     LOGD("Init lib");
     ASSERT_OK( TYInitLib() );
     TY_VERSION_INFO ver;
@@ -95,9 +95,21 @@ int main(int argc, char* argv[])
 
     int32_t allComps;
     ASSERT_OK( TYGetComponentIDs(hDevice, &allComps) );
-    if(allComps & TY_COMPONENT_RGB_CAM  && color) {
+    if(allComps & TY_COMPONENT_RGB_CAM /* && color*/) {
         LOGD("Has RGB camera, open RGB cam");
         ASSERT_OK( TYEnableComponents(hDevice, TY_COMPONENT_RGB_CAM) );
+    }else{
+        LOGD("not open RGB cam color=%d", color);
+    }
+    if(allComps & TY_COMPONENT_RGB_CAM_RIGHT) {
+        LOGD("has right RGB");
+    }else{
+        LOGD("has not right RGB");
+    }
+    if(allComps & TY_COMPONENT_RGB_CAM_LEFT) {
+        LOGD("has left RGB");
+    }else{
+        LOGD("has not left RGB");
     }
 
     if (allComps & TY_COMPONENT_IR_CAM_LEFT && ir) {
@@ -112,6 +124,7 @@ int main(int argc, char* argv[])
 
     LOGD("Configure components, open depth cam");
     if (allComps & TY_COMPONENT_DEPTH_CAM && depth) {
+        LOGD("Has depth camera, open depth right cam");
         std::vector<TY_ENUM_ENTRY> image_mode_list;
         ASSERT_OK(get_feature_enum_list(hDevice, TY_COMPONENT_DEPTH_CAM, TY_ENUM_IMAGE_MODE, image_mode_list));
         for (int idx = 0; idx < image_mode_list.size(); idx++){
@@ -176,6 +189,7 @@ int main(int argc, char* argv[])
             cv::Mat depth, irl, irr, color;
             parseFrame(frame, &depth, &irl, &irr, &color);
             if(!depth.empty()){
+                LOGD("show depth width:%d height:%d channels:%d", depth.cols, depth.rows, depth.channels());
                 depthViewer.show(depth);
             }
             if(!irl.empty()){ cv::imshow("LeftIR", irl); }

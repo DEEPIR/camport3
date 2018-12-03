@@ -1,7 +1,8 @@
 #pragma once
 #include <memory>
 #include <opencv2/opencv.hpp>
-namespace deepir::camport_wrapper {
+namespace deepir {
+namespace camport_wrapper{
 struct mat {
   cv::Mat content;
   uint64_t seq{0};
@@ -20,3 +21,4 @@ private:
   std::unique_ptr<impl> pimpl;
 };
 } // namespace deepir::camport_wrapper
+}

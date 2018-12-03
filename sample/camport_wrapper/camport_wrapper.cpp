@@ -5,7 +5,8 @@
 #include <sstream>
 using std::cout;
 using std::endl;
-namespace deepir::camport_wrapper {
+namespace deepir{
+namespace camport_wrapper {
 
 void eventCallback(TY_EVENT_INFO *event_info, void *userdata) {
   if (event_info->eventId == TY_EVENT_DEVICE_OFFLINE) {
@@ -127,7 +128,11 @@ public:
   mat next_depth_frame() {
     cout << "call next_depth frame" << endl;
     int err = TYFetchFrame(hDevice, &frame_data_, -1);
-    CHECK_OK(err);
+    if (err != TY_STATUS_OK){
+      mat m;
+      m.seq = -1;
+      return m;
+    }
     index_++;
     cout << "get frame:" << index_ << endl;
     cv::Mat depth, irl, irr, color;
@@ -137,6 +142,9 @@ public:
       m.content = depth;
       m.seq = index_;
     }
+    LOGD("Re-enqueue buffer(%p, %d)"
+                , frame_data_.userBuffer, frame_data_.bufferSize);
+    CHECK_OK( TYEnqueueBuffer(hDevice, frame_data_.userBuffer, frame_data_.bufferSize) );
     return m;
   }
   ~impl() {
@@ -172,3 +180,4 @@ void camport_wrapper::init() { pimpl->init(); }
 void camport_wrapper::start() { pimpl->start(); }
 
 } // namespace deepir::camport_wrapper
+}
