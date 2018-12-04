@@ -10,6 +10,9 @@ int main() {
   for(auto & dev : devs){
     cout << "device id:" << dev->id() << endl;
   }
+  if(devs.empty()){
+  	return 0;
+  }
   auto& dev = devs[1];
   dev->start();
   DepthViewer depthViewer("Depth");

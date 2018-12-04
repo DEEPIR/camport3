@@ -169,7 +169,7 @@ static inline TY_STATUS selectDevice(TY_INTERFACE_TYPE iface
     for(size_t t = 0; t < ifaceTypeList.size(); t++){
       for(uint32_t i = 0; i < ifaces.size(); i++){
         if(ifaces[i].type == ifaceTypeList[t] && (ifaces[i].type & iface) && deviceNum > out.size()){
-          LOGD("deviceNum:%d selected.size:%d begin select for %s......", deviceNum, out.size(), ifaces[i].name);
+          LOGD("deviceNum:%d selected.size:%d begin select for %s......", deviceNum, static_cast<int>(out.size()), ifaces[i].name);
           TY_INTERFACE_HANDLE hIface;
           ASSERT_OK( TYOpenInterface(ifaces[i].id, &hIface) );
           ASSERT_OK( TYUpdateDeviceList(hIface) );

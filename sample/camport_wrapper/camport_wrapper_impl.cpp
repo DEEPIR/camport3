@@ -125,12 +125,12 @@ camport_initer initer;
 std::vector<std::shared_ptr<camport_device>> 
 camport_wrapper_impl::find_devices(uint32_t device_num){
     std::vector<TY_DEVICE_BASE_INFO> selected;
-    CHECK_OK(selectDevice(TY_INTERFACE_ALL, "", "", device_num, selected));
+    selectDevice(TY_INTERFACE_ALL, "", "", device_num, selected);
     if (selected.empty()) {
-      throw std::runtime_error("has not selected device");
+	    return {};
     }
 
-    LOGD("selected size:%d", selected.size());
+    cout << "selected size:" << selected.size() << endl;
     for(const auto& selectedDev : selected){
       cout << "begin init seleted dev, id:" << selectedDev.id << endl;
       init_device(selectedDev);
