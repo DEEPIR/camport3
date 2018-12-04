@@ -169,11 +169,13 @@ static inline TY_STATUS selectDevice(TY_INTERFACE_TYPE iface
     for(size_t t = 0; t < ifaceTypeList.size(); t++){
       for(uint32_t i = 0; i < ifaces.size(); i++){
         if(ifaces[i].type == ifaceTypeList[t] && (ifaces[i].type & iface) && deviceNum > out.size()){
+          LOGD("deviceNum:%d selected.size:%d begin select for %s......", deviceNum, out.size(), ifaces[i].name);
           TY_INTERFACE_HANDLE hIface;
           ASSERT_OK( TYOpenInterface(ifaces[i].id, &hIface) );
           ASSERT_OK( TYUpdateDeviceList(hIface) );
           uint32_t n = 0;
           TYGetDeviceNumber(hIface, &n);
+          LOGD("%s's device num is %d", ifaces[i].name, n);
           if(n > 0){
             std::vector<TY_DEVICE_BASE_INFO> devs(n);
             TYGetDeviceList(hIface, &devs[0], n, &n);
