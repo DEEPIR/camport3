@@ -5,7 +5,7 @@ using namespace std;
 
 int main() {
   auto wrapper = deepir::camport_wrapper::get_wrapper();
-  auto devs = wrapper->find_devices(2);
+  auto devs = wrapper->find_devices(3);
   cout << "find devs size:" << devs.size() << endl;
   for (auto &dev : devs) {
     cout << "device id:" << dev->id() << endl;
