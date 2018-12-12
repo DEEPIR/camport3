@@ -15,8 +15,10 @@ public:
   virtual ~camport_device() = default;
 };
 
+
 class camport_wrapper {
 public:
+  //查找并初始化设备,device_num 是要查找的数量，一根usb线对应一个设备
   virtual std::vector<std::shared_ptr<camport_device>>
   find_devices(uint32_t device_num) = 0;
   virtual ~camport_wrapper() = default;
