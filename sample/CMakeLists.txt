@@ -7,6 +7,7 @@ set(ALL_SAMPLES
     ForceDeviceIP
     NetStatistic
     SimpleView_FetchFrame
+    SimpleView_SaveFrame
     SimpleView_Callback
     SimpleView_Registration
     SimpleView_FetchHisto
