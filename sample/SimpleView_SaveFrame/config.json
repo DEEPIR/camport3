@@ -1,0 +1,15 @@
+{
+	"all_rgb":[
+		"jpeg_2592x1944",
+		"jpeg_1280x960",
+		"jpeg_640x480",
+		"jpeg_320x240"
+	],
+	"all_depth":[
+		"depth16_640x480",
+		"depth16_1280x960",
+		"depth16_320x240"
+	],
+	"use_rgb":"jpeg_2592x1944",
+	"use_depth":"depth16_1280x960"
+}
