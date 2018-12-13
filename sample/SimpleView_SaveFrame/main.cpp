@@ -6,7 +6,7 @@
 static int fps_counter = 0;
 static clock_t fps_tm = 0;
 
-void save_frame(const cv::Mat& depth, const cv::Mat& leftIR, const cv::Mat& rightIR, const cv::Mat& color);
+void save_frame(const cv::Mat& depth, const cv::Mat& leftIR, const cv::Mat& rightIR, const cv::Mat& color, const std::string& img_path);
 #ifdef _WIN32
 static int get_fps() {
    const int kMaxCounter = 250;
@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
     json cfg = load_config("./config.json");
     std::string depth_fmt = cfg.at("depth_fmt");
     std::string rgb_fmt = cfg.at("rgb_fmt");
-
+    std::string img_path = cfg.at("img_path");
     std::string ID, IP;
     TY_INTERFACE_HANDLE hIface = NULL;
     TY_DEV_HANDLE hDevice = NULL;
@@ -239,7 +239,7 @@ int main(int argc, char* argv[])
                 exit_main = true;
                 break;
             case 's':
-                save_frame(depth, irl, irr, color);
+                save_frame(depth, irl, irr, color, img_path);
                 break;
             default:
                 LOGD("Unmapped key %d", key);
@@ -260,19 +260,22 @@ int main(int argc, char* argv[])
     LOGD("Main done!");
     return 0;
 }
-void save_frame(const cv::Mat& depth, const cv::Mat& leftIR, const cv::Mat& rightIR, const cv::Mat& color){
+void save_frame(const cv::Mat& depth, const cv::Mat& leftIR, const cv::Mat& rightIR, const cv::Mat& color, const std::string& img_path){
 	static int c = 0;
 	c++;
 	std::string depth_name = std::string("depth_") + std::to_string(c) + ".jpg";
 	std::string left_name = std::string("left_") + std::to_string(c) + ".jpg";
 	std::string right_name = std::string("right_") + std::to_string(c) + ".jpg";
 	std::string color_name = std::string("color_") + std::to_string(c) + ".jpg";
+	
 	if (!depth.empty()){ 
-		cv::imwrite(depth_name, depth);
+		std::string path = img_path + depth_name;
+		cv::imwrite(path, depth);
 		LOGI("depth width:%d, height:%d", depth.cols, depth.rows);
 	}
 	if (!color.empty()) {
-		cv::imwrite(color_name, color);
+		std::string path = img_path + color_name;
+		cv::imwrite(path, color);
 		LOGI("color width:%d, height:%d", color.cols, color.rows);
 	}
 	LOGI("save files done counter:%d", c);

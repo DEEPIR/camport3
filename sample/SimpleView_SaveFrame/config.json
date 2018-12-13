@@ -11,5 +11,6 @@
 		"depth16_320x240"
 	],
 	"rgb_fmt":"jpeg_2592x1944",
-	"depth_fmt":"depth16_1280x960"
+	"depth_fmt":"depth16_1280x960",
+	"img_path":"img/"
 }
