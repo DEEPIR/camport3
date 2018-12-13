@@ -1,4 +1,7 @@
 #include "../common/common.hpp"
+#include "../common/json.hpp"
+#include <string>
+#include <fstream>
 
 static int fps_counter = 0;
 static clock_t fps_tm = 0;
@@ -49,9 +52,19 @@ void eventCallback(TY_EVENT_INFO *event_info, void *userdata)
         LOGD("=== Event Callback: License Error!");
     }
 }
-
+using nlohmann::json;
+json load_config(const std::string& cfg_path){
+	std::fstream fs(cfg_path);
+	json cfg;
+	fs >> cfg;
+	return cfg;
+}
 int main(int argc, char* argv[])
 {
+    json cfg = load_config("./config.json");
+    std::string depth_fmt = cfg.at("depth_fmt");
+    std::string rgb_fmt = cfg.at("rgb_fmt");
+
     std::string ID, IP;
     TY_INTERFACE_HANDLE hIface = NULL;
     TY_DEV_HANDLE hDevice = NULL;
@@ -99,6 +112,24 @@ int main(int argc, char* argv[])
     if(allComps & TY_COMPONENT_RGB_CAM /* && color*/) {
         LOGD("Has RGB camera, open RGB cam");
         ASSERT_OK( TYEnableComponents(hDevice, TY_COMPONENT_RGB_CAM) );
+
+        std::vector<TY_ENUM_ENTRY> image_mode_list;
+        ASSERT_OK(get_feature_enum_list(hDevice, TY_COMPONENT_RGB_CAM, TY_ENUM_IMAGE_MODE, image_mode_list));
+        for (int idx = 0; idx < image_mode_list.size(); idx++){
+            TY_ENUM_ENTRY &entry = image_mode_list[idx];
+            //try to select a vga resolution
+	    auto w = TYImageWidth(entry.value);
+	    auto h = TYImageHeight(entry.value);
+	    LOGD("support RGB width:%d height:%d description:%s", w, h, entry.description);
+	    if(std::string(entry.description) == rgb_fmt){
+                LOGD("Select RGB Image Mode: %s", entry.description);
+                int err = TYSetEnum(hDevice, TY_COMPONENT_RGB_CAM, TY_ENUM_IMAGE_MODE, entry.value);
+		LOGD("set RGB mode error:%d", err);
+                ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
+                break;
+            }
+        }
+
     }else{
         LOGD("not open RGB cam color=%d", color);
     }
@@ -130,10 +161,13 @@ int main(int argc, char* argv[])
         ASSERT_OK(get_feature_enum_list(hDevice, TY_COMPONENT_DEPTH_CAM, TY_ENUM_IMAGE_MODE, image_mode_list));
         for (int idx = 0; idx < image_mode_list.size(); idx++){
             TY_ENUM_ENTRY &entry = image_mode_list[idx];
+	    LOGD("depth support Image mode:%s", entry.description);
             //try to select a vga resolution
-            if (TYImageWidth(entry.value) == 640 || TYImageHeight(entry.value) == 640){
+            //if (TYImageWidth(entry.value) == 640 || TYImageHeight(entry.value) == 640){
+	    if(std::string(entry.description) == depth_fmt){
                 LOGD("Select Depth Image Mode: %s", entry.description);
                 int err = TYSetEnum(hDevice, TY_COMPONENT_DEPTH_CAM, TY_ENUM_IMAGE_MODE, entry.value);
+		LOGD("set error:%d", err);
                 ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
                 break;
             }
