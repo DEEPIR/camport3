@@ -233,9 +233,13 @@ void save_frame(const cv::Mat& depth, const cv::Mat& leftIR, const cv::Mat& righ
 	std::string left_name = std::string("left_") + std::to_string(c) + ".jpg";
 	std::string right_name = std::string("right_") + std::to_string(c) + ".jpg";
 	std::string color_name = std::string("color_") + std::to_string(c) + ".jpg";
-	if (!depth.empty()) cv::imwrite(depth_name, depth);
-	if (!leftIR.empty()) cv::imwrite(left_name, leftIR);
-	if (!rightIR.empty()) cv::imwrite(right_name, rightIR);
-	if (!color.empty()) cv::imwrite(color_name, color);
+	if (!depth.empty()){ 
+		cv::imwrite(depth_name, depth);
+		LOGI("depth width:%d, height:%d", depth.cols, depth.rows);
+	}
+	if (!color.empty()) {
+		cv::imwrite(color_name, color);
+		LOGI("color width:%d, height:%d", color.cols, color.rows);
+	}
 	LOGI("save files done counter:%d", c);
 }
