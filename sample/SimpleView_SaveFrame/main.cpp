@@ -227,8 +227,8 @@ int main(int argc, char* argv[])
                 LOGD("show depth width:%d height:%d channels:%d", depth.cols, depth.rows, depth.channels());
                 depthViewer.show(depth);
             }
-            if(!irl.empty()){ cv::imshow("LeftIR", irl); }
-            if(!irr.empty()){ cv::imshow("RightIR", irr); }
+//            if(!irl.empty()){ cv::imshow("LeftIR", irl); }
+//            if(!irr.empty()){ cv::imshow("RightIR", irr); }
             if(!color.empty()){ cv::imshow("Color", color); }
 
             int key = cv::waitKey(1);
